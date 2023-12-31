@@ -8,15 +8,13 @@ pepper = os.getenv('PEPPER')
 
 def hash_password(password):
     salt = secrets.token_bytes(8).hex()
-    combined_salt = salt + pepper
+    combined_password = salt + pepper + password
 
-    hasher = pbkdf2_sha256.using(salt=combined_salt.encode('utf-8'), rounds=1000)
-    password_hash = hasher.hash(password)
+    password_hash = pbkdf2_sha256.hash(combined_password)
 
     return password_hash, salt
 
 def verify_password(db_password_hash, user_password, salt):
-    combined_salt = salt + pepper
-    hasher = pbkdf2_sha256.using(salt=combined_salt.encode('utf-8'), rounds=1000)
+    combined_user_password = salt + pepper + user_password
 
-    return hasher.verify(user_password, db_password_hash)
+    return pbkdf2_sha256.verify(combined_user_password, db_password_hash)
