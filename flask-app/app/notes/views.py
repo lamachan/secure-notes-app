@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template
 from flask_login import login_required
 
-home_bp = Blueprint('home', __name__)
+notes_bp = Blueprint('notes', __name__)
 
-@home_bp.route('/home')
+@notes_bp.route('/home')
 @login_required
 def home():
-    return render_template('home.html')
+    return render_template('notes/home.html')

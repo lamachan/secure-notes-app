@@ -18,18 +18,19 @@ def create_app(config_class=Config):
         db.create_all()
 
     login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
 
-    from .index import index_bp
-    from .auth import auth_bp
-    from .home import home_bp
+    from app.index.views import index_bp
+    from app.auth.views import auth_bp
+    from app.notes.views import notes_bp
 
     app.register_blueprint(index_bp, url_prefix='/')
     app.register_blueprint(auth_bp, url_prefix='/')
-    app.register_blueprint(home_bp, url_prefix='/')
+    app.register_blueprint(notes_bp, url_prefix='/')
 
     return app
