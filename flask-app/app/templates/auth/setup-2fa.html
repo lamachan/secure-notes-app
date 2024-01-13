@@ -11,7 +11,7 @@
           <ul>
             <li>Download <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=pl&gl=US" target="_blank">Google Authenticator</a> on your mobile.</li>
             <li>Set up a new authenticator.</li>
-            <li>Once you have scanned the QR, please click <a href="{{ url_for('auth.verify_two_fa') }}">here.</li>
+            <li>Scan QR code or Copy Secret.</li>
           </ul>
           <div class="text-center">
             <img src="data:image/png;base64, {{ qr_image }}" alt="Secret Token" style="width:200px;height:200px"/>
@@ -26,7 +26,7 @@
           </button>
         </div>
         <p class="mt-4 text-center">
-          Once you have scanned the QR, please click <a href="{{ url_for('auth.verify_two_fa') }}">here</a>.
+          Once you have scanned the QR, please click <a href="{{ url_for('auth.login') }}">here in order to log in.</a>
         </p>
       </form>
     </main>

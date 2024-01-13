@@ -32,6 +32,17 @@
               {% endfor %}
             {% endif %}
         </div>
+        <div class="form-floating">
+          {{ form.totp(placeholder="TOTP", class="form-control mb-2") }}
+          {{ form.totp.label }}
+            {% if form.totp.errors %}
+              {% for error in form.totp.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+              {% endfor %}
+            {% endif %}
+        </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
         <p class="text-center mt-3">New User? <a href="{{ url_for('auth.register') }}">Register now</a></p>
       </form>

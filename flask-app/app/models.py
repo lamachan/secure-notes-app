@@ -10,10 +10,14 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    salt = db.Column(db.String(10), nullable=False)
+    salt = db.Column(db.String(16), nullable=False)
     creation_date = db.Column(db.DateTime, nullable=False)
+
+    login_tries = db.Column(db.Integer, nullable=False, default=0)
+    disabled_until = db.Column(db.DateTime, nullable=True)
+
+    two_fa_secret = db.Column(db.String(32), unique=True)
     two_fa_enabled = db.Column(db.Boolean, nullable=False, default=False)
-    two_fa_secret = db.Column(db.String, unique=True)
 
     def __init__(self, username, password, salt):
         self.username = username
