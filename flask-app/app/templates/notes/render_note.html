@@ -1,0 +1,10 @@
+{% extends "_base.html" %}
+{% block content %}
+
+
+<h1>{{ note.title }}</h1>
+{{ note.content | safe }}
+<br>
+<a href="{{ url_for('notes.home') }}"><button type="button" class="w-100 btn btn-lg btn-primary">Go Home</button></a>
+
+{% endblock %}

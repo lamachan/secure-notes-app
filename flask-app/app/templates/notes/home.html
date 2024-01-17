@@ -3,12 +3,17 @@
 
 <h1 class="text-center">Welcome {{current_user.username}}!</h1>
 
-<h1>Your Notes</h1>
-    {% for note in notes %}
-        <h2>{{ note.title }}</h2>
-        {{ note.content | safe }}
-    {% endfor %}
+<br>
+<a href="{{ url_for('notes.add_note') }}"><button type="button" class="w-100 btn btn-lg btn-primary">Add a New Note</button></a>
+<br>
 
-    <a href="{{ url_for('notes.add_note') }}">Add a New Note</a>
+{% if notes|length > 0 %}
+<h2>Your Notes</h2>
+<ul>
+    {% for note in notes %}
+        <li><a href="{{ url_for('notes.render_note', note_id=note.id) }}">{{ note.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 {% endblock %}

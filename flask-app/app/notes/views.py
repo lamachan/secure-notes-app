@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 import markdown
 import bleach
@@ -30,7 +30,18 @@ def add_note():
         new_note = Note(title=form.title.data, content=cleaned_content, user=current_user)
         db.session.add(new_note)
         db.session.commit()
+
         flash('Note added successfully!', 'success')
         return redirect(url_for(HOME_URL))
 
     return render_template('notes/add_note.html', form=form)
+
+@notes_bp.route('/render-note/<int:note_id>')
+@login_required
+def render_note(note_id):
+    note = Note.query.get(note_id)
+
+    if note:
+        return render_template('notes/render_note.html', note=note)
+
+    abort(404)  # note not found
