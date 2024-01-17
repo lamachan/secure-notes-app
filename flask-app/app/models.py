@@ -44,4 +44,10 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
+
+    public = db.Column(db.Boolean, default=False)
+    encrypted = db.Column(db.Boolean, default=False)
+    salt = db.Column(db.String(24), nullable=True)
+    iv = db.Column(db.String(24), nullable=True)
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
