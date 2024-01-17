@@ -3,4 +3,12 @@
 
 <h1 class="text-center">Welcome {{current_user.username}}!</h1>
 
+<h1>Your Notes</h1>
+    {% for note in notes %}
+        <h2>{{ note.title }}</h2>
+        {{ note.content | safe }}
+    {% endfor %}
+
+    <a href="{{ url_for('notes.add_note') }}">Add a New Note</a>
+
 {% endblock %}

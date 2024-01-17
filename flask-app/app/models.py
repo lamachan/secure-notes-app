@@ -19,6 +19,8 @@ class User(db.Model, UserMixin):
     two_fa_secret = db.Column(db.String(32), unique=True)
     two_fa_enabled = db.Column(db.Boolean, nullable=False, default=False)
 
+    notes = db.relationship('Note', backref='user', lazy=True)
+
     def __init__(self, username, password, salt):
         self.username = username
         self.password = password
@@ -37,3 +39,9 @@ class User(db.Model, UserMixin):
     
     def __repr__(self):
         return f'<user {self.username}>'
+    
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
