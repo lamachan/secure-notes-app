@@ -67,19 +67,25 @@ def render_note(note_id):
     note = Note.query.get(note_id)
 
     if note:
-        if note.encrypted:
-            if request.method == 'POST':
-                password = request.form['password']
-                decrypted_content = decrypt_note(note.content, note.salt, note.iv, password)
-                if decrypted_content:
-                    # not showing decrypted_content yet!
-                    return render_template('notes/render_note.html', note=note)
-                else:
-                    print('Incorrect note password.')
-                    return redirect(url_for(HOME_URL))
-
-            return render_template('notes/verify_note_password.html')
-
+        if not note.public:
+            if note.user_id == current_user.id:
+                if note.encrypted:
+                    # note encrypted and current_user is the owner
+                    if request.method == 'POST':
+                        password = request.form['password']
+                        decrypted_content = decrypt_note(note.content, note.salt, note.iv, password)
+                        if decrypted_content:
+                            note.content = decrypted_content
+                            return render_template('notes/render_note.html', note=note)
+                        else:
+                            flash('Incorrect note password.', 'danger')
+                            return redirect(url_for(HOME_URL))
+                    return render_template('notes/verify_note_password.html')
+                # note not encrypted and current_user is the owner
+                return render_template('notes/render_note.html', note=note)
+            # note not public and current_user is not the owner
+            abort(403)
+        # note public
         return render_template('notes/render_note.html', note=note)
-
-    abort(404)  # note not found
+    # note not found
+    abort(404)
