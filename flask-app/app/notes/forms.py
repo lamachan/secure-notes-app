@@ -16,6 +16,7 @@ class NoteForm(FlaskForm):
             return False
         
         if self.public.data and self.encrypted.data:
-            raise ValidationError('An encrypted note cannot be public.')
+            self.public.errors.append('An encrypted note cannot be public.')
+            return False
         
         return True

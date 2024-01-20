@@ -1,15 +1,6 @@
 {% extends "_base.html" %}
 {% block content %}
 
-<!-- <h1>Add a New Note</h1>
-    <form method="post">
-        {{ form.hidden_tag() }}
-        {{ form.title.label }} {{ form.title }}
-        {{ form.content.label }} {{ form.content }}
-        {{ form.submit }}
-    </form>
-    <a href="{{ url_for('notes.home') }}">Go Home</a> -->
-
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
@@ -40,6 +31,42 @@
                 </div>
                 {% endfor %}
             {% endif %}
+            </div>
+
+            <div class="form-check form-check-inline">
+                {{ form.public(class="form-check-input") }}
+                {{ form.public.label(class="form-check-label") }}
+                {% if form.public.errors %}
+                    {% for error in form.public.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-check form-check-inline">
+                {{ form.encrypted(class="form-check-input") }}
+                {{ form.encrypted.label(class="form-check-label") }}
+                {% if form.encrypted.errors %}
+                    {% for error in form.encrypted.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-floating">
+                {{ form.note_password(placeholder="Note Password", class="form-control mb-2") }}
+                {{ form.note_password.label }}
+                {% if form.note_password.errors %}
+                    {% for error in form.note_password.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
             </div>
     
             <button class="w-100 btn btn-lg btn-primary" type="submit">Save Note</button>

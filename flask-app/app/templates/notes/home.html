@@ -7,10 +7,28 @@
 <a href="{{ url_for('notes.add_note') }}"><button type="button" class="w-100 btn btn-lg btn-primary">Add a New Note</button></a>
 <br>
 
-{% if notes|length > 0 %}
-<h2>Your Notes</h2>
+{% if personal_notes|length > 0 %}
+<h2>Your Unencrypted Notes</h2>
 <ul>
-    {% for note in notes %}
+    {% for note in personal_notes %}
+        <li><a href="{{ url_for('notes.render_note', note_id=note.id) }}">{{ note.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+<br>
+{% if encrypted_notes|length > 0 %}
+<h2>Your Encrypted Notes</h2>
+<ul>
+    {% for note in encrypted_notes %}
+        <li><a href="{{ url_for('notes.render_note', note_id=note.id) }}">{{ note.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+<br>
+{% if public_notes|length > 0 %}
+<h2>Public Notes</h2>
+<ul>
+    {% for note in public_notes %}
         <li><a href="{{ url_for('notes.render_note', note_id=note.id) }}">{{ note.title }}</a></li>
     {% endfor %}
 </ul>

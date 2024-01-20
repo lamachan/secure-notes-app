@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, abort
+from flask import Blueprint, render_template, flash, redirect, url_for, abort, request
 from flask_login import login_required, current_user
 import markdown
 import bleach
@@ -15,13 +15,14 @@ HOME_URL = 'notes.home'
 @notes_bp.route('/home')
 @login_required
 def home():
-    personal_notes = current_user.notes
-    public_notes = Note.query.filter_by(public=True, encrypted=False).all()
+    personal_notes = Note.query.filter_by(user_id=current_user.id, encrypted=False).all()
     encrypted_notes = Note.query.filter_by(user_id=current_user.id, encrypted=True).all()
+    public_notes = Note.query.filter_by(public=True, encrypted=False).all()
+
     return render_template('notes/home.html',
                             personal_notes=personal_notes,
-                            public_notes=public_notes,
-                            encrypted_notes=encrypted_notes)
+                            encrypted_notes=encrypted_notes,
+                            public_notes=public_notes)
 
 @notes_bp.route('/add-note', methods=['GET', 'POST'])
 @login_required
@@ -40,7 +41,7 @@ def add_note():
         # encrypt note - returns the encrypted_content, salt and iv
         encrypted_content, salt, iv = None, None, None
         if form.encrypted.data and form.note_password.data:
-            encrypted_content, salt, iv = encrypt_note(cleaned_content, form.note_password.data)
+            salt, iv, encrypted_content = encrypt_note(cleaned_content, form.note_password.data)
 
         new_note = Note(
             title=form.title.data,
@@ -60,12 +61,25 @@ def add_note():
 
     return render_template('notes/add_note.html', form=form)
 
-@notes_bp.route('/render-note/<int:note_id>')
+@notes_bp.route('/render-note/<int:note_id>', methods=['GET','POST'])
 @login_required
 def render_note(note_id):
     note = Note.query.get(note_id)
 
     if note:
+        if note.encrypted:
+            if request.method == 'POST':
+                password = request.form['password']
+                decrypted_content = decrypt_note(note.content, note.salt, note.iv, password)
+                if decrypted_content:
+                    # not showing decrypted_content yet!
+                    return render_template('notes/render_note.html', note=note)
+                else:
+                    print('Incorrect note password.')
+                    return redirect(url_for(HOME_URL))
+
+            return render_template('notes/verify_note_password.html')
+
         return render_template('notes/render_note.html', note=note)
 
     abort(404)  # note not found

@@ -28,3 +28,7 @@ Problemy:
 - gdy user wyjdzie z setup-2fa zanim doda authenticator
 - nieistniejący username przy login
 - UTC time
+- pole Content w add-note zbyt małe
+- render/note-id:
+    - odszyfrowanie notatek zaszyfrowanych
+    - wejście na /render-note/id gdzie id to notatka niepubliczna innego użytkownika
