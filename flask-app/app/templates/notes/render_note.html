@@ -1,29 +1,6 @@
 {% extends "_base.html" %}
 {% block content %}
 
-<!-- <div class="container">
-    
-    {% if note.is_encrypted %}
-        {% if current_user == note.user %}
-            <form method="post" action="{{ url_for('notes.verify_password', note_id=note.id) }}">
-                {{ form.hidden_tag() }}
-                <label for="password">Enter Note Password:</label>
-                <input type="password" name="password" id="password" required>
-                <button type="submit">Submit Password</button>
-            </form>
-        {% else %}
-            <p>This note is encrypted. Only the owner can enter the password.</p>
-        {% endif %}
-    {% else %}
-        <div>
-            <h1>{{ note.title }}</h1>
-            {{ note.content | safe }}
-        </div>
-    {% endif %}
-    <br>
-    <a href="{{ url_for('notes.home') }}"><button type="button" class="w-100 btn btn-lg btn-primary">Go Home</button></a>
-</div> -->
-
 <h1>{{ note.title }}</h1>
 {{ note.content | safe }}
 <br>

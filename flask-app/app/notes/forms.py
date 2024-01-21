@@ -20,3 +20,7 @@ class NoteForm(FlaskForm):
             return False
         
         return True
+    
+class NotePasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Submit')

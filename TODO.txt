@@ -1,9 +1,9 @@
 Wymagania:
 + przechowywanie notatek tekstowych
-+- notatki szyfrowanie
-+- udostępnianie notatek nieszyfrowanych:
++ notatki szyfrowanie
++ udostępnianie notatek nieszyfrowanych:
     (-) wybranym użytkownikom
-    +- publicznie
+    + publicznie
 +- ostylowanie notatek:
     + pogrubienie
     + pochylenie
@@ -13,7 +13,7 @@ Wymagania:
 - uwierzytelnianie:
     +- walidacja danych wejściowych z negatywnym nastawieniem
     +- opóżnienia
-    +- limity prób
+    + limity prób
     +- ograniczone informowanie o błędach
     + bezpieczne przechowywanie hasła
     +- kontrola siły hasła
@@ -26,9 +26,5 @@ Wymagania:
 
 Problemy:
 - gdy user wyjdzie z setup-2fa zanim doda authenticator
-- nieistniejący username przy login
-- UTC time
 - pole Content w add-note zbyt małe
-- render/note-id:
-    - przetestować - wejście na /render-note/id gdzie id to notatka niepubliczna innego użytkownika
-    - form note password
+- render-note: Not Found, Forbidden -> Go Home

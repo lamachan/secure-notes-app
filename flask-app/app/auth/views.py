@@ -56,7 +56,10 @@ def login():
             db_password_hash = user.password
             if user.disabled_until and user.disabled_until > datetime.utcnow():
                 # login is still disabled due to too many unsuccessful login attempts
-                flash(f'Login for this user is disabled. Try again after {user.disabled_until}', 'danger')
+                disabled_timedelta = user.disabled_until - datetime.utcnow()
+                minutes = disabled_timedelta.seconds // 60
+                seconds = disabled_timedelta.seconds % 60
+                flash(f'Login for this user is disabled. Try again after {minutes:02}:{seconds:02}.', 'danger')
                 return redirect(url_for(LOGIN_URL))
             elif not verify_password(db_password_hash, form.password.data, salt) or \
                     not user.is_totp_valid(form.totp.data):

@@ -5,7 +5,7 @@ import bleach
 
 from app import db
 from app.models import Note
-from app.notes.forms import NoteForm
+from app.notes.forms import NoteForm, NotePasswordForm
 from app.notes.encrypt_module import encrypt_note, decrypt_note
 
 notes_bp = Blueprint('notes', __name__)
@@ -71,16 +71,23 @@ def render_note(note_id):
             if note.user_id == current_user.id:
                 if note.encrypted:
                     # note encrypted and current_user is the owner
-                    if request.method == 'POST':
-                        password = request.form['password']
+                    form = NotePasswordForm()
+
+                    if form.validate_on_submit():
+                        # 'POST' - password submitted
+                        password = form.password.data
                         decrypted_content = decrypt_note(note.content, note.salt, note.iv, password)
+
                         if decrypted_content:
+                            # correct note password
                             note.content = decrypted_content
                             return render_template('notes/render_note.html', note=note)
                         else:
+                            # incorrect note password
                             flash('Incorrect note password.', 'danger')
                             return redirect(url_for(HOME_URL))
-                    return render_template('notes/verify_note_password.html')
+                    # 'GET' - password to be submitted
+                    return render_template('notes/verify_note_password.html', form=form)
                 # note not encrypted and current_user is the owner
                 return render_template('notes/render_note.html', note=note)
             # note not public and current_user is not the owner
