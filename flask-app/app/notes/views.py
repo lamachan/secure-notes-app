@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 import markdown
 import bleach
 
-from app import db
+from app.app import db
 from app.models import Note
 from app.notes.forms import NoteForm, NotePasswordForm
 from app.notes.encrypt_module import encrypt_note, decrypt_note

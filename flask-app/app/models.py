@@ -2,7 +2,7 @@ from datetime import datetime
 from flask_login import UserMixin
 import pyotp
 
-from app import db
+from app.app import db
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'

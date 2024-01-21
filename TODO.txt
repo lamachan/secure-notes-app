@@ -19,12 +19,14 @@ Wymagania:
     +- kontrola siły hasła
     + TOTP
     +- zarządzanie uprawnieniami do zasobów
-- konteneryzacja
++- konteneryzacja
 +- baza danych
-- nginx
-- szyfrowane połączenie
++- nginx
++- szyfrowane połączenie
 
 Problemy:
 - gdy user wyjdzie z setup-2fa zanim doda authenticator
 - pole Content w add-note zbyt małe
 - render-note: Not Found, Forbidden -> Go Home
+- automatyczna generacja ssl
+- uruchomienie przez tylko 'docker-compose up'

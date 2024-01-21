@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from time import sleep
 from datetime import datetime, timedelta
 
-from app import db
+from app.app import db
 from app.models import User
 from app.utils import get_b64encoded_qr_image
 from app.auth.auth_module import hash_password, verify_password
