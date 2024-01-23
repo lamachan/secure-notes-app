@@ -47,6 +47,8 @@ def login():
     if current_user.is_authenticated:
         flash('You are already logged in.', 'info')
         return redirect(url_for(HOME_URL))
+    
+    login_fail_msg = 'Invalid username, password, TOTP or account disabled.'
         
     form = LoginForm(request.form)
     if form.validate_on_submit():
@@ -56,10 +58,8 @@ def login():
             db_password_hash = user.password
             if user.disabled_until and user.disabled_until > datetime.utcnow():
                 # login is still disabled due to too many unsuccessful login attempts
-                disabled_timedelta = user.disabled_until - datetime.utcnow()
-                minutes = disabled_timedelta.seconds // 60
-                seconds = disabled_timedelta.seconds % 60
-                flash(f'Login for this user is disabled. Try again after {minutes:02}:{seconds:02}.', 'danger')
+                sleep(1)
+                flash(login_fail_msg, 'danger')
                 return redirect(url_for(LOGIN_URL))
             elif not verify_password(db_password_hash, form.password.data, salt) or \
                     not user.is_totp_valid(form.totp.data):
@@ -74,7 +74,8 @@ def login():
                         user.login_tries = 0
                         db.session.commit()
 
-                        flash(f'Account login is currently disabled due to too many unsuccessful login attempts. Try again later.', 'danger')
+                        sleep(1)
+                        flash(login_fail_msg, 'danger')
                         return redirect(url_for(LOGIN_URL))
                 except Exception:
                     db.session.rollback()
@@ -82,7 +83,7 @@ def login():
                     return redirect(url_for(LOGIN_URL))
 
                 sleep(1)
-                flash('Invalid username, password or TOTP.', 'danger')
+                flash(login_fail_msg, 'danger')
                 return redirect(url_for(LOGIN_URL))
             else:
                 # correct credentials
@@ -99,7 +100,8 @@ def login():
                 flash('You are now logged in.', 'success')
                 return redirect(url_for(HOME_URL))
         else:
-            flash('Invalid username, password or TOTP.', 'danger')
+            sleep(1)
+            flash(login_fail_msg, 'danger')
             return redirect(url_for(LOGIN_URL))
 
     return render_template('auth/login.html', form=form)

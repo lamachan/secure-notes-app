@@ -22,7 +22,7 @@
             </div>
     
             <div class="form-floating">
-            {{ form.content(placeholder="Content", class="form-control mb-2") }}
+            {{ form.content(placeholder="Content", class="form-control mb-2", rows=5) }}
             {{ form.content.label }}
             {% if form.content.errors %}
                 {% for error in form.content.errors %}

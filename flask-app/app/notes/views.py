@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, abort, request
+from flask import Blueprint, render_template, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 import markdown
 import bleach
@@ -38,7 +38,6 @@ def add_note():
         allowed_tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'strong', 'em', 'a', 'img']
         cleaned_content = bleach.clean(rendered_content, tags=allowed_tags, attributes={'a': ['href', 'target'], 'img': ['src', 'alt']})
 
-        # encrypt note - returns the encrypted_content, salt and iv
         encrypted_content, salt, iv = None, None, None
         if form.encrypted.data and form.note_password.data:
             salt, iv, encrypted_content = encrypt_note(cleaned_content, form.note_password.data)
@@ -96,3 +95,11 @@ def render_note(note_id):
         return render_template('notes/render_note.html', note=note)
     # note not found
     abort(404)
+
+@notes_bp.errorhandler(403)
+def forbidden_error(error):
+    return render_template('errors/403.html'), 403
+
+@notes_bp.errorhandler(404)
+def not_found_error(error):
+    return render_template('errors/404.html'), 404

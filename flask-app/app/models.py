@@ -17,7 +17,6 @@ class User(db.Model, UserMixin):
     disabled_until = db.Column(db.DateTime, nullable=True)
 
     two_fa_secret = db.Column(db.String(32), unique=True)
-    two_fa_enabled = db.Column(db.Boolean, nullable=False, default=False)
 
     notes = db.relationship('Note', backref='user', lazy=True)
 
@@ -41,6 +40,8 @@ class User(db.Model, UserMixin):
         return f'<user {self.username}>'
     
 class Note(db.Model):
+    __tablename__ = 'note'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)

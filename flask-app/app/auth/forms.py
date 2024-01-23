@@ -1,16 +1,25 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, InputRequired, EqualTo, Length
+from wtforms.validators import DataRequired, InputRequired, EqualTo, Length, Regexp
 
 from app.models import User
 
 
 class RegisterForm(FlaskForm):
     username = StringField(
-        'Username', validators=[DataRequired(), Length(min=4, max=50)]
+        'Username', validators=[
+            DataRequired(),
+            Length(min=4, max=50),
+            Regexp('^[a-zA-Z0-9_]+$', message='Username can only contain letters, digits, and underscores.')
+        ]
     )
     password = PasswordField(
-        'Password', validators=[DataRequired(), Length(min=8, max=50)]
+        'Password', validators=[
+            DataRequired(),
+            Length(min=8, max=50),
+            Regexp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:"<>?~])',
+                   message='Password must include at least one lowercase letter, one uppercase letter, one digit, and one special character.')
+        ]
     )
     confirm = PasswordField(
         'Repeat password',
@@ -27,7 +36,8 @@ class RegisterForm(FlaskForm):
         
         user = User.query.filter_by(username=self.username.data).first()
         if user:
-            self.username.errors.append('Username is already taken.')
+            # username already exists
+            self.username.errors.append('Invalid username.')
             return False
         
         if self.password.data != self.confirm.data:
