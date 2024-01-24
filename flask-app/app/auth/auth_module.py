@@ -10,6 +10,7 @@ def hash_password(password):
     salt = secrets.token_bytes(8).hex()
     combined_password = salt + pepper + password
 
+    # default rounds = 29000
     password_hash = pbkdf2_sha256.hash(combined_password)
 
     return password_hash, salt

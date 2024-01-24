@@ -11,7 +11,7 @@ from app.auth.forms import RegisterForm, LoginForm
 
 auth_bp = Blueprint('auth', __name__)
 
-LOGIN_DISABLED_TIMEOUT = 300
+LOGIN_DISABLED_TIMEOUT = 300    # 5 minute timeout
 
 HOME_URL = 'notes.home'
 INDEX_URL = 'index.index'

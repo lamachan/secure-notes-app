@@ -49,4 +49,4 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    totp = StringField('TOTP', validators=[InputRequired(), Length(min=6, max=6)])
+    totp = StringField('TOTP', validators=[InputRequired(), Length(min=6, max=6), Regexp('^\d+$', message='TOTP must contain only digits.')])
